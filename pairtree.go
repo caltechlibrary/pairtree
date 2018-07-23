@@ -78,6 +78,7 @@ func charDecode(s string) string {
 	return s
 }
 
+// Encode takes a string and encodes it as a pairtree path.
 func Encode(src string) string {
 	s := charEncode(src)
 	results := []string{}
@@ -94,6 +95,7 @@ func Encode(src string) string {
 	return strings.Join(results, string(os.PathSeparator))
 }
 
+// Decode takes a pairtree path and returns the original string representation
 func Decode(src string) string {
 	parts := strings.Split(src, string(os.PathSeparator))
 	results := []string{}

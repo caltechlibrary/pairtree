@@ -24,55 +24,64 @@ import (
 	"strings"
 )
 
+const (
+	Version = `v0.0.2`
+)
+
 var (
-	stepOneEncoding = map[string]string{
-		" ":  "^20",
-		"\"": "^22",
-		"<":  "^3c",
-		"\\": "^5c",
-		"*":  "^2a",
-		"=":  "^3d",
-		"^":  "^5e",
-		"+":  "^2b",
-		">":  "^3e",
-		"|":  "^7c",
-		",":  "^2c",
-		"?":  "^3f",
+	stepOneEncoding = map[rune][]rune{
+		' ':  []rune("^20"),
+		'"':  []rune("^22"),
+		'<':  []rune("^3c"),
+		'\\': []rune("^5c"),
+		'*':  []rune("^2a"),
+		'=':  []rune("^3d"),
+		'^':  []rune("^5e"),
+		'+':  []rune("^2b"),
+		'>':  []rune("^3e"),
+		'|':  []rune("^7c"),
+		',':  []rune("^2c"),
+		'?':  []rune("^3f"),
 	}
-	stepTwoEncoding = map[string]string{
-		"/": "=",
-		":": "+",
-		".": ",",
+	stepTwoEncoding = map[rune]rune{
+		'/': '=',
+		':': '+',
+		'.': ',',
 	}
 )
 
-func charEncode(s string) string {
-	//NOTE: we need to replace ^ with ^5e and avoid collisions with other hex values
-	// we split the string into an array of substrings then replace each one as as need to.
-	p := strings.Split(s, "")
-	for i, target := range p {
-		if val, ok := stepOneEncoding[target]; ok == true {
-			p[i] = val
+func charEncode(src []rune) []rune {
+	// NOTE: We run through stepOneEncoding map first, then stepTwoEncoding...
+	results := []rune{}
+	for i := 0; i < len(src); i++ {
+		if val, ok := stepOneEncoding[src[i]]; ok == true {
+			results = append(results, val...)
+		} else {
+			results = append(results, src[i])
 		}
 	}
-	s = strings.Join(p, "")
-	for target, replacement := range stepTwoEncoding {
-		if strings.Contains(s, target) {
-			s = strings.Replace(s, target, replacement, -1)
+	for i := 0; i < len(results); i++ {
+		key := results[i]
+		if val, ok := stepTwoEncoding[key]; ok == true {
+			results[i] = val
 		}
 	}
-	return s
+	return results
 }
 
 func charDecode(s string) string {
 	for replacement, target := range stepTwoEncoding {
-		if strings.Contains(s, target) {
-			s = strings.Replace(s, target, replacement, -1)
+		t := string(target)
+		r := string(replacement)
+		if strings.Contains(s, t) {
+			s = strings.Replace(s, t, r, -1)
 		}
 	}
 	for replacement, target := range stepOneEncoding {
-		if strings.Contains(s, target) {
-			s = strings.Replace(s, target, replacement, -1)
+		t := string(target)
+		r := string(replacement)
+		if strings.Contains(s, t) {
+			s = strings.Replace(s, t, r, -1)
 		}
 	}
 	return s
@@ -80,37 +89,47 @@ func charDecode(s string) string {
 
 // Encode takes a string and encodes it as a pairtree path.
 func Encode(src string) string {
-	s := charEncode(src)
-	results := []string{}
+	//s := charEncode(src)
+	//s := []rune(src)
+	s := charEncode([]rune(src))
+	results := []rune{}
 	for i := 0; i < len(s); i += 2 {
+		if len(results) > 0 {
+			results = append(results, os.PathSeparator)
+		}
 		if (i + 2) < len(s) {
+			//FIXME need to char encode here...
 			t := s[i : i+2]
-			results = append(results, t)
+			results = append(results, t...)
 		} else {
+			//FIXME need to char encode here...
 			t := s[i:]
-			results = append(results, t)
+			results = append(results, t...)
 		}
 	}
-	results = append(results, "")
-	return strings.Join(results, string(os.PathSeparator))
+	if len(results) > 0 {
+		return string(results) + "/"
+	}
+	return string(results)
 }
 
 // Decode takes a pairtree path and returns the original string representation
 func Decode(src string) string {
-	parts := strings.Split(src, string(os.PathSeparator))
+	s := []rune(src)
 	results := []string{}
-	for _, segment := range parts {
-		if segment == "obj" {
-			break
+	prev, cur := 0, 0
+	for ; cur < len(s); cur++ {
+		if s[cur] == os.PathSeparator {
+			switch cur - prev {
+			case 2:
+				results = append(results, string(s[prev:cur]))
+				prev = cur + 1
+			case 1:
+				results = append(results, string(s[prev:cur]))
+			default:
+				break
+			}
 		}
-		if len(segment) > 2 {
-			break
-		}
-		if len(segment) == 1 {
-			results = append(results, segment)
-			break
-		}
-		results = append(results, segment)
 	}
 	return charDecode(strings.Join(results, ""))
 }

@@ -31,7 +31,7 @@ func TestCharEncoding(t *testing.T) {
 	}
 
 	for src, expected := range testCharEncoding {
-		result := charEncode(src)
+		result := string(charEncode([]rune(src)))
 		if result != expected {
 			t.Errorf("%q, expected %q, got %q", src, expected, result)
 		}
@@ -94,6 +94,24 @@ func TestAdvanced(t *testing.T) {
 		"ark:/13030/xt12t3":                     "ar/k+/=1/30/30/=x/t1/2t/3/",
 		"http://n2t.info/urn:nbn:se:kb:repos-1": "ht/tp/+=/=n/2t/,i/nf/o=/ur/n+/nb/n+/se/+k/b+/re/po/s-/1/",
 		"what-the-*@?#!^!?":                     "wh/at/-t/he/-^/2a/@^/3f/#!/^5/e!/^3/f/",
+	}
+	for src, expected := range testData {
+		result := Encode(src)
+		if result != expected {
+			t.Errorf("encode %q, expected %q, got %q", src, expected, result)
+		}
+	}
+	for expected, src := range testData {
+		result := Decode(src)
+		if result != expected {
+			t.Errorf("decode %q, expected %q, got %q", src, expected, result)
+		}
+	}
+}
+
+func TestUTF8Names(t *testing.T) {
+	testData := map[string]string{
+		"Hänggi-P": "Hä/ng/gi/-P/",
 	}
 	for src, expected := range testData {
 		result := Encode(src)

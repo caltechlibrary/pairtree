@@ -25,7 +25,7 @@ import (
 )
 
 const (
-	Version = `v0.0.2`
+	Version = `v0.0.3`
 )
 
 var (
@@ -108,7 +108,7 @@ func Encode(src string) string {
 		}
 	}
 	if len(results) > 0 {
-		return string(results) + "/"
+		results = append(results, os.PathSeparator)
 	}
 	return string(results)
 }

@@ -21,7 +21,7 @@ package pairtree
 
 import (
 	"os"
-	"path"
+	"path/filepath"
 	"testing"
 )
 
@@ -55,15 +55,15 @@ func TestCharEncoding(t *testing.T) {
 func TestBasic(t *testing.T) {
 	// Test Basic encoding
 	testEncodings := map[string]string{
-		"abcd":       path.Join("ab", "cd") + pathSep,
-		"abcdefg":    path.Join("ab", "cd", "ef", "g") + pathSep,
-		"12-986xy4":  path.Join("12", "-9", "86", "xy", "4") + pathSep,
-		"2018-06-01": path.Join("20", "18", "-0", "6-", "01") + pathSep,
-		"a":          path.Join("a") + pathSep,
-		"ab":         path.Join("ab") + pathSep,
-		"abc":        path.Join("ab", "c") + pathSep,
-		"abcde":      path.Join("ab", "cd", "e") + pathSep,
-		"mnopqz":     path.Join("mn", "op", "qz") + pathSep,
+		"abcd":       filepath.Join("ab", "cd") + pathSep,
+		"abcdefg":    filepath.Join("ab", "cd", "ef", "g") + pathSep,
+		"12-986xy4":  filepath.Join("12", "-9", "86", "xy", "4") + pathSep,
+		"2018-06-01": filepath.Join("20", "18", "-0", "6-", "01") + pathSep,
+		"a":          filepath.Join("a") + pathSep,
+		"ab":         filepath.Join("ab") + pathSep,
+		"abc":        filepath.Join("ab", "c") + pathSep,
+		"abcde":      filepath.Join("ab", "cd", "e") + pathSep,
+		"mnopqz":     filepath.Join("mn", "op", "qz") + pathSep,
 	}
 	for src, expected := range testEncodings {
 		result := Encode(src)
@@ -88,12 +88,12 @@ func TestBasic(t *testing.T) {
 
 func TestAdvanced(t *testing.T) {
 	testData := map[string]string{
-		"ark:/13030/xt12t3": path.Join("ar", "k+", "=1", "30", "30",
+		"ark:/13030/xt12t3": filepath.Join("ar", "k+", "=1", "30", "30",
 			"=x", "t1", "2t", "3") + pathSep,
-		"http://n2t.info/urn:nbn:se:kb:repos-1": path.Join("ht", "tp",
+		"http://n2t.info/urn:nbn:se:kb:repos-1": filepath.Join("ht", "tp",
 			"+=", "=n", "2t", ",i", "nf", "o=", "ur", "n+", "nb", "n+",
 			"se", "+k", "b+", "re", "po", "s-", "1") + pathSep,
-		"what-the-*@?#!^!?": path.Join("wh", "at", "-t", "he", "-^",
+		"what-the-*@?#!^!?": filepath.Join("wh", "at", "-t", "he", "-^",
 			"2a", "@^", "3f", "#!", "^5", "e!", "^3",
 			"f") + pathSep,
 	}
@@ -113,7 +113,7 @@ func TestAdvanced(t *testing.T) {
 
 func TestUTF8Names(t *testing.T) {
 	testData := map[string]string{
-		"Hänggi-P": path.Join("Hä", "ng", "gi", "-P") + pathSep,
+		"Hänggi-P": filepath.Join("Hä", "ng", "gi", "-P") + pathSep,
 	}
 	for src, expected := range testData {
 		result := Encode(src)

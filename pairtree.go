@@ -1,5 +1,5 @@
 //
-// pairtree.go implements encoding/decoding of object identifiers and pairtree paths (ppaths) per
+// pairtree.go implements encoding/decoding of object identifiers and pairtree paths (paths) per
 // https://confluence.ucop.edu/download/attachments/14254128/PairtreeSpec.pdf?version=2&modificationDate=1295552323000&api=v2
 //
 // Author R. S. Doiel, <rsdoiel@library.caltech.edu>
@@ -25,7 +25,7 @@ import (
 )
 
 const (
-	Version = `v0.0.3`
+	Version = `v0.0.4`
 )
 
 var (
@@ -89,8 +89,6 @@ func charDecode(s string) string {
 
 // Encode takes a string and encodes it as a pairtree path.
 func Encode(src string) string {
-	//s := charEncode(src)
-	//s := []rune(src)
 	s := charEncode([]rune(src))
 	results := []rune{}
 	for i := 0; i < len(s); i += 2 {

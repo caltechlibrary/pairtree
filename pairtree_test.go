@@ -4,7 +4,7 @@
 //
 // Author R. S. Doiel, <rsdoiel@library.caltech.edu>
 //
-// Copyright (c) 2018, Caltech
+// Copyright (c) 2020, Caltech
 // All rights not granted herein are expressly reserved by Caltech.
 //
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -20,10 +20,18 @@
 package pairtree
 
 import (
+	"os"
+	"path"
 	"testing"
 )
 
+var (
+	pathSep = string([]rune{os.PathSeparator})
+)
+
 func TestCharEncoding(t *testing.T) {
+	//FIXME: test is posix-centric, need to handle other
+	// paths delimiters.
 	testCharEncoding := map[string]string{
 		"ark:/13030/xt12t3":                     "ark+=13030=xt12t3",
 		"http://n2t.info/urn:nbn:se:kb:repos-1": "http+==n2t,info=urn+nbn+se+kb+repos-1",
@@ -47,15 +55,15 @@ func TestCharEncoding(t *testing.T) {
 func TestBasic(t *testing.T) {
 	// Test Basic encoding
 	testEncodings := map[string]string{
-		"abcd":       "ab/cd/",
-		"abcdefg":    "ab/cd/ef/g/",
-		"12-986xy4":  "12/-9/86/xy/4/",
-		"2018-06-01": "20/18/-0/6-/01/",
-		"a":          "a/",
-		"ab":         "ab/",
-		"abc":        "ab/c/",
-		"abcde":      "ab/cd/e/",
-		"mnopqz":     "mn/op/qz/",
+		"abcd":       path.Join("ab", "cd") + pathSep,
+		"abcdefg":    path.Join("ab", "cd", "ef", "g") + pathSep,
+		"12-986xy4":  path.Join("12", "-9", "86", "xy", "4") + pathSep,
+		"2018-06-01": path.Join("20", "18", "-0", "6-", "01") + pathSep,
+		"a":          path.Join("a") + pathSep,
+		"ab":         path.Join("ab") + pathSep,
+		"abc":        path.Join("ab", "c") + pathSep,
+		"abcde":      path.Join("ab", "cd", "e") + pathSep,
+		"mnopqz":     path.Join("mn", "op", "qz") + pathSep,
 	}
 	for src, expected := range testEncodings {
 		result := Encode(src)
@@ -64,20 +72,9 @@ func TestBasic(t *testing.T) {
 		}
 	}
 
-	testDecodings := map[string]string{
-		"mn/op/qz/":                 "mnopqz",
-		"mn/op/qz/pairtree_bar/tu/": "mnopqz",
-		"po/nm/z/qs/tu/":            "ponmz",
-		"mn/op/qz/bar.txt":          "mnopqz",
-		"a/":                        "a",
-		"ab/":                       "ab",
-		"ab/c/":                     "abc",
-		"ab/cd/":                    "abcd",
-		"ab/cd/e/":                  "abcde",
-		"ab/cd/ef/":                 "abcdef",
-		"ab/cd/ef/g/":               "abcdefg",
-		"20/18/-0/6-/01/":           "2018-06-01",
-		"12/-9/86/xy/4/":            "12-986xy4",
+	testDecodings := map[string]string{}
+	for val, key := range testEncodings {
+		testDecodings[key] = val
 	}
 
 	// Test Basic decoding
@@ -91,9 +88,14 @@ func TestBasic(t *testing.T) {
 
 func TestAdvanced(t *testing.T) {
 	testData := map[string]string{
-		"ark:/13030/xt12t3":                     "ar/k+/=1/30/30/=x/t1/2t/3/",
-		"http://n2t.info/urn:nbn:se:kb:repos-1": "ht/tp/+=/=n/2t/,i/nf/o=/ur/n+/nb/n+/se/+k/b+/re/po/s-/1/",
-		"what-the-*@?#!^!?":                     "wh/at/-t/he/-^/2a/@^/3f/#!/^5/e!/^3/f/",
+		"ark:/13030/xt12t3": path.Join("ar", "k+", "=1", "30", "30",
+			"=x", "t1", "2t", "3") + pathSep,
+		"http://n2t.info/urn:nbn:se:kb:repos-1": path.Join("ht", "tp",
+			"+=", "=n", "2t", ",i", "nf", "o=", "ur", "n+", "nb", "n+",
+			"se", "+k", "b+", "re", "po", "s-", "1") + pathSep,
+		"what-the-*@?#!^!?": path.Join("wh", "at", "-t", "he", "-^",
+			"2a", "@^", "3f", "#!", "^5", "e!", "^3",
+			"f") + pathSep,
 	}
 	for src, expected := range testData {
 		result := Encode(src)
@@ -111,7 +113,7 @@ func TestAdvanced(t *testing.T) {
 
 func TestUTF8Names(t *testing.T) {
 	testData := map[string]string{
-		"Hänggi-P": "Hä/ng/gi/-P/",
+		"Hänggi-P": path.Join("Hä", "ng", "gi", "-P") + pathSep,
 	}
 	for src, expected := range testData {
 		result := Encode(src)

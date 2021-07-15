@@ -1,0 +1,31 @@
+{
+  "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
+  "@type": "SoftwareSourceCode",
+  "description": "A Golang pairtree implementation.",
+  "name": "pairtree",
+  "codeRepository": "https://github.com/caltechlibrary/pairtree",
+  "issueTracker": "https://github.com/caltechlibrary/pairtree/issues",
+  "license": "https://github.com/caltechlibrary/pairtree/blob/main/LICENSE",
+  "version": "1.0.0",
+  "author": [
+    {
+      "@type": "Person",
+      "givenName": "Robert",
+      "familyName": "Doiel",
+      "affiliation": "California Institute of Technology Library",
+      "email": "rsdoiel@caltech.edu",
+      "@id": "https://orcid.org/0000-0003-0900-6903"
+    }],
+  "developmentStatus": "active",
+  "downloadUrl": "https://github.com/caltechlibrary/pairtree/archive/main.zip",
+  "keywords": [
+    "software",
+    "science"
+  ],
+  "maintainer": "https://orcid.org/0000-0003-0900-6903",
+  "funder": { 
+          "@id": "https://doi.org/10.13039/100006961",
+          "@type": "Organization",
+          "name": "Caltech Library"
+  }
+}

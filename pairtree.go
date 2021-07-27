@@ -24,10 +24,6 @@ import (
 	"strings"
 )
 
-const (
-	Version = `v0.0.4`
-)
-
 var (
 	stepOneEncoding = map[rune][]rune{
 		' ':  []rune("^20"),

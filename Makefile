@@ -60,8 +60,7 @@ refresh:
 	git fetch origin
 	git pull origin $(BRANCH)
 
-publish:
-	./mk_website.py
+publish: website
 	bash publish.bash
 
 clean: 

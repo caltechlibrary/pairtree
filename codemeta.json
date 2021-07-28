@@ -6,7 +6,7 @@
   "codeRepository": "https://github.com/caltechlibrary/pairtree",
   "issueTracker": "https://github.com/caltechlibrary/pairtree/issues",
   "license": "https://github.com/caltechlibrary/pairtree/blob/main/LICENSE",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": [
     {
       "@type": "Person",

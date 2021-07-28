@@ -3,7 +3,7 @@
 #
 PROJECT = pairtree
 
-PROGRAMS = 
+PROGRAMS = $(shell ls -1 cmd)
 
 PACKAGE = $(shell ls -1 *.go)
 
@@ -44,7 +44,10 @@ test: $(PACKAGE)
 	go test
 
 website:
-	./mk_website.py
+	pandoc -f markdown -t html nav.md >nav.tmpl
+	pandoc -f markdown -t html --metadata title="README" -s --template page.tmpl README.md >index.html
+	pandoc -f markdown -t html --metadata title="INSTALL" -s --template page.tmpl  INSTALL.md >install.html
+	pandoc -f markdown -t html --metadata title="LICENSE" -s --template page.tmpl LICENSE >license.html
 
 status:
 	git status

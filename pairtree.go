@@ -4,7 +4,7 @@
 //
 // Author R. S. Doiel, <rsdoiel@library.caltech.edu>
 //
-// Copyright (c) 2018, Caltech
+// Copyright (c) 2021, Caltech
 // All rights not granted herein are expressly reserved by Caltech.
 //
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -25,6 +25,10 @@ import (
 )
 
 var (
+	// Separator is the path separator used for your pairtree.
+	// by default it is set to your operating system's path separator.
+	Separator = '/'
+
 	stepOneEncoding = map[rune][]rune{
 		' ':  []rune("^20"),
 		'"':  []rune("^22"),
@@ -83,13 +87,18 @@ func charDecode(s string) string {
 	return s
 }
 
+// Set will set the separator used in encoding and decoding the Pairtree path
+func Set(c rune) {
+	Separator = c
+}
+
 // Encode takes a string and encodes it as a pairtree path.
 func Encode(src string) string {
 	s := charEncode([]rune(src))
 	results := []rune{}
 	for i := 0; i < len(s); i += 2 {
 		if len(results) > 0 {
-			results = append(results, os.PathSeparator)
+			results = append(results, Separator)
 		}
 		if (i + 2) < len(s) {
 			//FIXME need to char encode here...
@@ -102,7 +111,7 @@ func Encode(src string) string {
 		}
 	}
 	if len(results) > 0 {
-		results = append(results, os.PathSeparator)
+		results = append(results, Separator)
 	}
 	return string(results)
 }
@@ -113,7 +122,7 @@ func Decode(src string) string {
 	results := []string{}
 	prev, cur := 0, 0
 	for ; cur < len(s); cur++ {
-		if s[cur] == os.PathSeparator {
+		if s[cur] == Separator {
 			switch cur - prev {
 			case 2:
 				results = append(results, string(s[prev:cur]))
@@ -126,4 +135,8 @@ func Decode(src string) string {
 		}
 	}
 	return charDecode(strings.Join(results, ""))
+}
+
+func init() {
+	Separator = os.PathSeparator
 }

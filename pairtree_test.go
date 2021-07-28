@@ -4,7 +4,7 @@
 //
 // Author R. S. Doiel, <rsdoiel@library.caltech.edu>
 //
-// Copyright (c) 2020, Caltech
+// Copyright (c) 2021, Caltech
 // All rights not granted herein are expressly reserved by Caltech.
 //
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -21,13 +21,14 @@ package pairtree
 
 import (
 	"os"
-	"path/filepath"
+	"strings"
 	"testing"
 )
 
-var (
-	pathSep = string([]rune{os.PathSeparator})
-)
+func sepJoin(sep rune, parts ...string) string {
+	pathSep := string([]rune{sep})
+	return strings.Join(parts, pathSep) + pathSep
+}
 
 func TestCharEncoding(t *testing.T) {
 	//FIXME: test is posix-centric, need to handle other
@@ -53,17 +54,18 @@ func TestCharEncoding(t *testing.T) {
 }
 
 func TestBasic(t *testing.T) {
+	sep := Separator
 	// Test Basic encoding
 	testEncodings := map[string]string{
-		"abcd":       filepath.Join("ab", "cd") + pathSep,
-		"abcdefg":    filepath.Join("ab", "cd", "ef", "g") + pathSep,
-		"12-986xy4":  filepath.Join("12", "-9", "86", "xy", "4") + pathSep,
-		"2018-06-01": filepath.Join("20", "18", "-0", "6-", "01") + pathSep,
-		"a":          filepath.Join("a") + pathSep,
-		"ab":         filepath.Join("ab") + pathSep,
-		"abc":        filepath.Join("ab", "c") + pathSep,
-		"abcde":      filepath.Join("ab", "cd", "e") + pathSep,
-		"mnopqz":     filepath.Join("mn", "op", "qz") + pathSep,
+		"abcd":       sepJoin(sep, "ab", "cd"),
+		"abcdefg":    sepJoin(sep, "ab", "cd", "ef", "g"),
+		"12-986xy4":  sepJoin(sep, "12", "-9", "86", "xy", "4"),
+		"2018-06-01": sepJoin(sep, "20", "18", "-0", "6-", "01"),
+		"a":          sepJoin(sep, "a"),
+		"ab":         sepJoin(sep, "ab"),
+		"abc":        sepJoin(sep, "ab", "c"),
+		"abcde":      sepJoin(sep, "ab", "cd", "e"),
+		"mnopqz":     sepJoin(sep, "mn", "op", "qz"),
 	}
 	for src, expected := range testEncodings {
 		result := Encode(src)
@@ -86,16 +88,66 @@ func TestBasic(t *testing.T) {
 	}
 }
 
+func TestCustomSeparator(t *testing.T) {
+	sep := os.PathSeparator
+	if Separator != os.PathSeparator {
+		t.Errorf("separator not set, expected %c, got %c", sep, Separator)
+		t.FailNow()
+	}
+	sep = ':'
+	Set(':')
+	if Separator != sep {
+		t.Errorf("separator not set, expected %c, got %c", sep, Separator)
+		t.FailNow()
+	}
+	testEncodings := map[string]string{
+		"abcd":       sepJoin(sep, "ab", "cd"),
+		"abcdefg":    sepJoin(sep, "ab", "cd", "ef", "g"),
+		"12-986xy4":  sepJoin(sep, "12", "-9", "86", "xy", "4"),
+		"2018-06-01": sepJoin(sep, "20", "18", "-0", "6-", "01"),
+		"a":          sepJoin(sep, "a"),
+		"ab":         sepJoin(sep, "ab"),
+		"abc":        sepJoin(sep, "ab", "c"),
+		"abcde":      sepJoin(sep, "ab", "cd", "e"),
+		"mnopqz":     sepJoin(sep, "mn", "op", "qz"),
+	}
+	testDecodings := map[string]string{}
+	for val, key := range testEncodings {
+		testDecodings[key] = val
+	}
+
+	for src, expected := range testEncodings {
+		result := Encode(src)
+		if result != expected {
+			t.Errorf("encoding %q, expected %q, got %q", src, expected, result)
+		}
+	}
+
+	// Test Basic decoding
+	for src, expected := range testDecodings {
+		result := Decode(src)
+		if result != expected {
+			t.Errorf("decoding %q, expected %q, got %q", src, expected, result)
+		}
+	}
+	sep = os.PathSeparator
+	Set(os.PathSeparator)
+	if Separator != os.PathSeparator {
+		t.Errorf("separator not set, expected %c, got %c", sep, Separator)
+		t.FailNow()
+	}
+}
+
 func TestAdvanced(t *testing.T) {
 	testData := map[string]string{
-		"ark:/13030/xt12t3": filepath.Join("ar", "k+", "=1", "30", "30",
-			"=x", "t1", "2t", "3") + pathSep,
-		"http://n2t.info/urn:nbn:se:kb:repos-1": filepath.Join("ht", "tp",
+		"ark:/13030/xt12t3": sepJoin(Separator, "ar", "k+", "=1", "30", "30",
+			"=x", "t1", "2t", "3"),
+		"http://n2t.info/urn:nbn:se:kb:repos-1": sepJoin(Separator, "ht", "tp",
 			"+=", "=n", "2t", ",i", "nf", "o=", "ur", "n+", "nb", "n+",
-			"se", "+k", "b+", "re", "po", "s-", "1") + pathSep,
-		"what-the-*@?#!^!?": filepath.Join("wh", "at", "-t", "he", "-^",
+			"se", "+k", "b+", "re", "po", "s-", "1"),
+		"what-the-*@?#!^!?": sepJoin(Separator, "wh", "at", "-t", "he", "-^",
 			"2a", "@^", "3f", "#!", "^5", "e!", "^3",
-			"f") + pathSep,
+			"f"),
 	}
 	for src, expected := range testData {
 		result := Encode(src)
@@ -113,7 +165,7 @@ func TestAdvanced(t *testing.T) {
 
 func TestUTF8Names(t *testing.T) {
 	testData := map[string]string{
-		"Hänggi-P": filepath.Join("Hä", "ng", "gi", "-P") + pathSep,
+		"Hänggi-P": sepJoin(Separator, "Hä", "ng", "gi", "-P"),
 	}
 	for src, expected := range testData {
 		result := Encode(src)

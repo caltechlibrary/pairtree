@@ -87,6 +87,11 @@ func charDecode(s string) string {
 	return s
 }
 
+// Get will return the current separator in use in the package
+func Get() rune {
+	return Separator
+}
+
 // Set will set the separator used in encoding and decoding the Pairtree path
 func Set(c rune) {
 	Separator = c

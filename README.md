@@ -1,3 +1,8 @@
+DEPRECATED
+==========
+
+This Go package is now being maintained as part of [dataset](https://github.com/caltechlibrary/dataset).
+
 Pairtree
 ========
 

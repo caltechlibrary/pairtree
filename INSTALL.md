@@ -4,7 +4,15 @@
 *pairtree* is a command line program run from a shell like Bash. It allows you to organize encode
 "Name as Text" documents to provide metadata for a directory.
 
-This is generalized instructions for a release.  For deployment suggestions see NOTES.md
+Quick install with curl
+-----------------------
+
+If you are running macOS or Linux you can install released versions of newt
+with the following curl command.
+
+~~~
+curl https://caltechlibrary.github.io/pairtree/installer.sh
+~~~
 
 ## Compiled version
 

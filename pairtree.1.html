@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>README</title>
+    <title>pairtree.1</title>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="/css/site.css">
 </head>
@@ -23,42 +23,36 @@
 </nav>
 
 <section>
-<h1 id="pairtree">Pairtree</h1>
-<p>This is a library for translate a UTF-8 string to/from a pairtree
-notation. This is typically used in storing things on disc
-(e.g. repository filesystems). This code is based on the specification
-found at
-https://confluence.ucop.edu/download/attachments/14254128/PairtreeSpec.pdf?version=2&amp;modificationDate=1295552323000&amp;api=v2
-which is cited on the <a
-href="https://github.com/OCFL/spec/wiki">OCFL</a> wiki.</p>
-<h2 id="features">Features</h2>
-<ul>
-<li><code>Set()</code> will let you set the path separator
-<ul>
-<li><code>Separator</code> is a readonly value of the file separator
-used by <code>Encode()</code> and <code>Decode()</code></li>
-</ul></li>
-<li><code>Encode()</code> will encode the provided string as a pairtree
-path</li>
-<li><code>Decode()</code> will decode a pairtree path returning the
-unencoded string</li>
-</ul>
-<h2 id="example">Example</h2>
-<pre><code>    import (
-        &quot;fmt&quot;
-        &quot;os&quot;
-
-        &quot;github.com/caltechlibrary/pairtree&quot;
-    )
-
-    func main() {
-        key := &quot;12mIEERD11&quot;
-        fmt.Printf(&quot;Key: %q\n&quot;, key)
-        pairPath := pairtree.Encode(key)
-        fmt.Printf(&quot;Endoded key %q -&gt; %q\n&quot;, key, pairPath)
-        key = Decode(pairPath)
-        fmt.Printf(&quot;Decoded path %q -&gt; %q\n&quot;, pairPath, key)
-    }</code></pre>
+<h1 id="name">NAME</h1>
+<p>pairtree</p>
+<h1 id="synopsis">SYNOPSIS</h1>
+<p>pairtree <a href="#options">OPTIONS</a> encode|decode STRING</p>
+<h1 id="description">DESCRIPTION</h1>
+<p>pairtree will encode or decode a string to/from a pairtree path.</p>
+<h1 id="options">OPTIONS</h1>
+<dl>
+<dt>-h, -help</dt>
+<dd>
+display help
+</dd>
+<dt>-version</dt>
+<dd>
+display version
+</dd>
+<dt>-license</dt>
+<dd>
+display license
+</dd>
+<dt>-s SEP</dt>
+<dd>
+set separator to SEP
+</dd>
+</dl>
+<h1 id="examples">EXAMPLES</h1>
+<p>Encode key 12345</p>
+<pre class="shell"><code>pairtree encode 12345</code></pre>
+<p>Decode path 12/34/5</p>
+<pre class="shell"><code>pairtree decode 12/34/5</code></pre>
 </section>
 
 <footer>

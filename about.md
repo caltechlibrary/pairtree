@@ -10,16 +10,16 @@ authors:
     orcid: "https://orcid.org/0000-0003-0900-6903"
 
 repository-code: "https://github.com/caltechlibrary/pairtree"
-version: 1.0.3
+version: 1.0.4
 license-url: "https://github.com/caltechlibrary/pairtree/blob/main/LICENSE"
 keywords: [ "software", "science" ]
-date-released: 2020-03-19
+date-released: 2024-08-29
 ---
 
 About this software
 ===================
 
-## pairtree 1.0.3
+## pairtree 1.0.4
 
 ### Authors
 

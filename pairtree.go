@@ -50,7 +50,7 @@ var (
 	}
 )
 
-func charEncode(src []rune) []rune {
+func CharEncode(src []rune) []rune {
 	// NOTE: We run through stepOneEncoding map first, then stepTwoEncoding...
 	results := []rune{}
 	for i := 0; i < len(src); i++ {
@@ -69,7 +69,7 @@ func charEncode(src []rune) []rune {
 	return results
 }
 
-func charDecode(s string) string {
+func CharDecode(s string) string {
 	for replacement, target := range stepTwoEncoding {
 		t := string(target)
 		r := string(replacement)
@@ -99,7 +99,7 @@ func Set(c rune) {
 
 // Encode takes a string and encodes it as a pairtree path.
 func Encode(src string) string {
-	s := charEncode([]rune(src))
+	s := CharEncode([]rune(src))
 	results := []rune{}
 	for i := 0; i < len(s); i += 2 {
 		if len(results) > 0 {
@@ -139,7 +139,7 @@ func Decode(src string) string {
 			}
 		}
 	}
-	return charDecode(strings.Join(results, ""))
+	return CharDecode(strings.Join(results, ""))
 }
 
 func init() {

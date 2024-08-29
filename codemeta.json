@@ -7,10 +7,11 @@
   "codeRepository": "https://github.com/caltechlibrary/pairtree",
   "issueTracker": "https://github.com/caltechlibrary/pairtree/issues",
   "license": "https://github.com/caltechlibrary/pairtree/blob/main/LICENSE",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "dateCreated": "2018-06-26",
-  "datePublished": "2020-03-19",
-  "dateModified": "2024-02-26",
+  "datePublished": "2024-08-29",
+  "dateModified": "2024-08-29",
+  "dateReleased": "2024-08-29",
   "author": [
     {
       "@type": "Person",

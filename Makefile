@@ -112,7 +112,8 @@ check: .FORCE
 	go vet *.go
 
 test: clean build
-	go test -mailto "test@example.edu"
+	#go test -mailto "test@example.edu"
+	go test
 
 clean: 
 	-if [ -d bin ]; then rm -fR bin; fi

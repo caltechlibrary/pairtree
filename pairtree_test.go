@@ -40,13 +40,13 @@ func TestCharEncoding(t *testing.T) {
 	}
 
 	for src, expected := range testCharEncoding {
-		result := string(charEncode([]rune(src)))
+		result := string(CharEncode([]rune(src)))
 		if result != expected {
 			t.Errorf("%q, expected %q, got %q", src, expected, result)
 		}
 	}
 	for expected, src := range testCharEncoding {
-		result := charDecode(src)
+		result := CharDecode(src)
 		if result != expected {
 			t.Errorf("%q, expected %q, got %q", src, expected, result)
 		}

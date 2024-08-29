@@ -1,7 +1,7 @@
 ---
-title: "pairtree(1) user manual | version 1.0.3 3a42a41"
+title: "pairtree(1) user manual | version 1.0.4 222cf64"
 author: "R. S. Doiel"
-pubDate: 2024-02-26
+pubDate: 2024-08-29
 ---
 
 # NAME

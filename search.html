@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>README</title>
+    <title>search</title>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="https://caltechlibrary.github.io/css/site.css">
 	<script type="module" src="https://caltechlibrary.github.io/CL-web-components/src/footer-global.js"></script>
@@ -24,42 +24,23 @@
 </nav>
 
 <section>
-<h1 id="pairtree">Pairtree</h1>
-<p>This is a library for translate a UTF-8 string to/from a pairtree
-notation. This is typically used in storing things on disc
-(e.g. repository filesystems). This code is based on the specification
-found at
-https://confluence.ucop.edu/download/attachments/14254128/PairtreeSpec.pdf?version=2&amp;modificationDate=1295552323000&amp;api=v2
-which is cited on the <a
-href="https://github.com/OCFL/spec/wiki">OCFL</a> wiki.</p>
-<h2 id="features">Features</h2>
-<ul>
-<li><code>Set()</code> will let you set the path separator
-<ul>
-<li><code>Separator</code> is a readonly value of the file separator
-used by <code>Encode()</code> and <code>Decode()</code></li>
-</ul></li>
-<li><code>Encode()</code> will encode the provided string as a pairtree
-path</li>
-<li><code>Decode()</code> will decode a pairtree path returning the
-unencoded string</li>
-</ul>
-<h2 id="example">Example</h2>
-<pre><code>    import (
-        &quot;fmt&quot;
-        &quot;os&quot;
+<h1 id="pairtree">pairtree</h1>
+<link href="./pagefind/pagefind-ui.css" rel="stylesheet">
+<script src="./pagefind/pagefind-ui.js" type="text/javascript"></script>
+<div id="search">
 
-        &quot;github.com/caltechlibrary/pairtree&quot;
-    )
-
-    func main() {
-        key := &quot;12mIEERD11&quot;
-        fmt.Printf(&quot;Key: %q\n&quot;, key)
-        pairPath := pairtree.Encode(key)
-        fmt.Printf(&quot;Endoded key %q -&gt; %q\n&quot;, key, pairPath)
-        key = Decode(pairPath)
-        fmt.Printf(&quot;Decoded path %q -&gt; %q\n&quot;, pairPath, key)
-    }</code></pre>
+</div>
+<script>
+    const u = URL.parse(window.location.href);
+    const basePath = u.pathname.replace(/search.html$/g, '');
+    
+    window.addEventListener('DOMContentLoaded', (event) => {
+        new PagefindUI({ 
+            element: "#search",
+            baseUrl: basePath
+        });
+    });
+</script>
 </section>
 
 <footer-global></footer-global>
